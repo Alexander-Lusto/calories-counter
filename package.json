@@ -1,0 +1,18 @@
+{
+  "name": "calorie-counter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Проект на JavaScript «Счётчик каллорий» от HTML Academy",
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack-dev-server --open"
+  },
+  "devDependencies": {
+    "webpack": "5.72.1",
+    "webpack-cli": "4.9.2",
+    "webpack-dev-server": "4.9.0"
+  },
+  "engines": {
+    "node": "10"
+  }
+}
