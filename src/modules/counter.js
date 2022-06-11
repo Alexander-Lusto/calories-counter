@@ -1,5 +1,32 @@
 import {createElement} from '../utils/render';
 
+const GENDER = {
+  MALE: `male`,
+  FEMALE: `female`,
+};
+
+const Parameter = {
+  AGE: `age`,
+  HEIGHT: `height`,
+  WEIGHT: `weight`,
+};
+
+const Activity = {
+  MINIMUM: `min`,
+  LOW: `low`,
+  MEDIUM: `medium`,
+  HIGH: `high`,
+  MAXIMUM: `max`,
+};
+
+const COEFFICIENT = {
+  MINIMUM: 1.2,
+  LOW: 1.375,
+  MEDIUM: 1.55,
+  HIGH: 1.725,
+  MAXIMUM: 1.9,
+};
+
 const createCounterTemplate = () => {
   return(`
     <form class="counter__form form" name="counter" action="#" method="post">
@@ -145,21 +172,110 @@ const createCounterTemplate = () => {
       </div>
     </form>
   `);
-}
+};
 
 export default class Counter {
-  conctructor() {
+  constructor(result) {
     this._element = null;
+    this._result = result;
+
+    this._gender = GENDER.MALE;
+    this._age = null;
+    this._height = null;
+    this._weight = null;
+    this._coefficient = COEFFICIENT.MINIMUM;
+  }
+
+  setGenderInputChangeHandler() {
+    const inputs = this.getElement().querySelectorAll(`input[name="gender"]`);
+    inputs.forEach((el) => el.addEventListener(`change`, (evt) => {
+
+      switch (evt.target.value) {
+        case GENDER.MALE:
+          this._gender = GENDER.MALE;
+          break;
+        case GENDER.FEMALE:
+          this._gender = GENDER.FEMALE;
+          break;
+      }
+
+    }));
+  }
+
+  setPhysicalActivityRadioChangeHandler() {
+    const radioButtons = this.getElement().querySelectorAll(`input[name="activity"]`);
+    radioButtons.forEach((el) => el.addEventListener(`change`, (evt) => {
+
+      switch(evt.target.value) {
+        case Activity.MINIMUM:
+          this._coefficient = COEFFICIENT.MINIMUM;
+          break;
+
+        case Activity.LOW:
+          this._coefficient = COEFFICIENT.LOW;
+          break;
+
+        case Activity.MEDIUM:
+          this._coefficient = COEFFICIENT.MEDIUM;
+          break;
+
+        case Activity.HIGH:
+          this._coefficient = COEFFICIENT.HIGH;
+          break;
+        
+        case Activity.MAXIMUM:
+          this._coefficient = COEFFICIENT.MAXIMUM;
+          break;
+      }  
+      
+    }));
   }
 
   setInputsChangeHandler() {
     const inputs = Array.from(this.getElement().querySelectorAll(`.inputs-group input`));
     const submitButton = this.getElement().querySelector(`.form__submit-button`);
     
-    inputs.forEach((el) => el.addEventListener(`change`, () => {
+    inputs.forEach((el) => el.addEventListener(`change`, (evt) => {
+
       const isFilled = inputs.every((el) => Number(el.value) > 0);
       if (isFilled) submitButton.disabled = false;
+
+      switch (evt.target.name) {
+        case Parameter.AGE:
+          this._age = Number(evt.target.value);
+          break;
+        case Parameter.HEIGHT:
+          this._height = Number(evt.target.value);
+          break;
+        case Parameter.WEIGHT:
+          this._weight = Number(evt.target.value);
+          break;
+      }
     }));
+  }
+
+  setSubmitButtonClickHandler() {
+    const submitButton = this.getElement().querySelector(`.form__submit-button`);
+
+    submitButton.addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      const calories = this._countCalories();
+
+      if (this._result.hiddenMode) this._result.show(calories);
+      else this._result.update(calories)
+    });
+  }
+
+  _countCalories() {
+    let calories;
+    if (this._gender === GENDER.MALE) {
+      calories =  (10 * this._weight) + (6.25 * this._height) - (5 * this._age) + 5;
+    }
+    if (this._gender === GENDER.FEMALE) {
+      calories =  (10 * this._weight) + (6.25 * this._height) - (5 * this._age) - 161;
+    }
+
+    return calories * this._coefficient;
   }
 
   removeElement() {

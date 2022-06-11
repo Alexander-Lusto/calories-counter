@@ -1,17 +1,17 @@
 import {createElement} from '../utils/render';
-import {render} from '../utils/render';
 
 const HIDDEN_CLASS = `counter__result--hidden`;
 const createResultTemplate = (calories) => {
+  calories = calories ? calories : 0;
   return(`
-    <section class="counter__result counter__result--hidden">
+    <section class="counter__result ${calories ? `` : `counter__result--hidden`}">
       <h2 class="heading">
         Ваша норма калорий
       </h2>
       <ul class="counter__result-list">
         <li class="counter__result-item">
           <h3>
-            <span id="calories-norm">${calories}</span> ккал
+            <span id="calories-norm">${Math.round(calories)}</span> ккал
           </h3>
           <p>
             поддержание веса
@@ -19,7 +19,7 @@ const createResultTemplate = (calories) => {
         </li>
         <li class="counter__result-item">
           <h3>
-            <span id="calories-minimal">${calories - calories * 0.15}</span> ккал
+            <span id="calories-minimal">${Math.round(calories - calories * 0.15)}</span> ккал
           </h3>
           <p>
             снижение веса
@@ -27,7 +27,7 @@ const createResultTemplate = (calories) => {
         </li>
         <li class="counter__result-item">
           <h3>
-            <span id="calories-maximal">${calories + calories * 0.15}</span> ккал
+            <span id="calories-maximal">${Math.round(calories + calories * 0.15)}</span> ккал
           </h3>
           <p>
             набор веса
@@ -39,15 +39,35 @@ const createResultTemplate = (calories) => {
 }
 
 export default class Result {
-  constructor () {
+  constructor (container) {
+    this._container = container;
     this._calories = null;
     this._element = null;
     this.hiddenMode = true;
   }
 
+  update(calories) {
+    this._calories = calories;
+    console.log(this._calories);
+
+    this.removeElement();
+    this.getElement();
+    this._container.insertAdjacentElement(`beforeend`, this._element);
+  }
+
+  show(calories) {
+    if (this._calories === calories) return;
+    this._calories = calories;
+    this.update(calories);
+    
+
+    this._element.classList.remove(HIDDEN_CLASS);
+    this.hiddenMode = false;
+  }
+
   getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate());
+      this._element = createElement(this.getTemplate(this._calories));
     }
 
     return this._element;
