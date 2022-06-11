@@ -1,5 +1,7 @@
 import {createElement} from '../utils/render';
+import {render} from '../utils/render';
 
+const HIDDEN_CLASS = `counter__result--hidden`;
 const createResultTemplate = (calories) => {
   return(`
     <section class="counter__result counter__result--hidden">
@@ -37,9 +39,10 @@ const createResultTemplate = (calories) => {
 }
 
 export default class Result {
-  constructor (calories) {
-    this._calories = calories;
+  constructor () {
+    this._calories = null;
     this._element = null;
+    this.hiddenMode = true;
   }
 
   getElement() {
