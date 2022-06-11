@@ -64,7 +64,7 @@ const createCounterTemplate = () => {
               </span>
             </div>
             <div class="input__wrapper">
-              <input type="text" id="age" name="age" placeholder="0" inputmode="decimal" maxlength="3" required>
+              <input type="number" id="age" name="age" placeholder="0" inputmode="decimal" maxlength="3" required>
             </div>
           </div>
           <div class="input">
@@ -77,7 +77,7 @@ const createCounterTemplate = () => {
               </span>
             </div>
             <div class="input__wrapper">
-              <input type="text" id="height" name="height" placeholder="0" inputmode="decimal" maxlength="3" required>
+              <input type="number" id="height" name="height" placeholder="0" inputmode="decimal" maxlength="3" required>
             </div>
           </div>
           <div class="input">
@@ -90,7 +90,7 @@ const createCounterTemplate = () => {
               </span>
             </div>
             <div class="input__wrapper">
-              <input type="text" id="weight" name="weight" placeholder="0" inputmode="decimal" maxlength="3" required>
+              <input type="number" id="weight" name="weight" placeholder="0" inputmode="decimal" maxlength="3" required>
             </div>
           </div>
         </div>
@@ -185,6 +185,7 @@ export default class Counter {
     this._weight = null;
     this._coefficient = COEFFICIENT.MINIMUM;
   }
+
   setHandlers() {
     this._setInputsChangeHandler();
     this._setPhysicalActivityRadioChangeHandler();
@@ -269,8 +270,9 @@ export default class Counter {
   _setResetbuttonClickHandler() {
     const resetButton = this.getElement().querySelector(`.form__reset-button`);
     const submitButton = this.getElement().querySelector(`.form__submit-button`);
+
     resetButton.addEventListener(`click`, () => {
-      document.querySelector('.counter__form').reset();
+      this._element.reset();
       this._result.hide();
       submitButton.disabled = true;
       resetButton.disabled = true;

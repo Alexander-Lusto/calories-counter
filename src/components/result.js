@@ -64,6 +64,10 @@ export default class Result {
   hide() {
     this._element.classList.add(HIDDEN_CLASS);
     this.hiddenMode = true;
+
+    this._element.querySelector(`#calories-norm`).textContent = 0;
+    this._element.querySelector(`#calories-minimal`).textContent = 0;
+    this._element.querySelector(`#calories-maximal`).textContent = 0;
   }
 
   getElement() {

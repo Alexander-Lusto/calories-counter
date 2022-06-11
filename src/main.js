@@ -1,11 +1,11 @@
-import CounterComponent from './modules/counter';
-import ResultComponent from "./modules/result";
+import CounterComponent from './components/counter';
+import ResultComponent from "./components/result";
 import {render} from './utils/render';
 
 const container = document.querySelector(`.container`);
-const result = new ResultComponent();
-const counter = new CounterComponent(result);
+const resultComponent = new ResultComponent();
+const counterComponent = new CounterComponent(resultComponent);
 
-counter.setHandlers();
-render(container, counter);
-render(container, result);
+counterComponent.setHandlers();
+render(container, counterComponent);
+render(container, resultComponent);
