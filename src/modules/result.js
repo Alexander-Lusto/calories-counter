@@ -39,30 +39,31 @@ const createResultTemplate = (calories) => {
 }
 
 export default class Result {
-  constructor (container) {
-    this._container = container;
+  constructor () {
     this._calories = null;
     this._element = null;
     this.hiddenMode = true;
   }
 
   update(calories) {
+    if (this._calories === calories) return;
     this._calories = calories;
-    console.log(this._calories);
 
-    this.removeElement();
-    this.getElement();
-    this._container.insertAdjacentElement(`beforeend`, this._element);
+    this._element.querySelector(`#calories-norm`).textContent = Math.round(calories);
+    this._element.querySelector(`#calories-minimal`).textContent = Math.round(calories - calories * 0.15);
+    this._element.querySelector(`#calories-maximal`).textContent = Math.round(calories + calories * 0.15);
   }
 
   show(calories) {
-    if (this._calories === calories) return;
-    this._calories = calories;
     this.update(calories);
     
-
     this._element.classList.remove(HIDDEN_CLASS);
     this.hiddenMode = false;
+  }
+
+  hide() {
+    this._element.classList.add(HIDDEN_CLASS);
+    this.hiddenMode = true;
   }
 
   getElement() {
